@@ -1,9 +1,12 @@
+import 'package:fec_corp_app/providers/account_provider.dart';
+import 'package:fec_corp_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart' as l;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:provider/provider.dart';
 
 class CheckinScreen extends StatefulWidget {
   const CheckinScreen({super.key});
@@ -13,6 +16,7 @@ class CheckinScreen extends StatefulWidget {
 }
 
 class _CheckinScreenState extends State<CheckinScreen> {
+  final authService = AuthService();
   bool gpsEnabled = false;
   bool permissionGranted = false;
   l.Location location = l.Location();
@@ -22,9 +26,11 @@ class _CheckinScreenState extends State<CheckinScreen> {
   List<dynamic> checkinData = [];
 
   Future<List<dynamic>> getData() async {
-    var res = await http.get(Uri.parse(
-        'https://api.codingthailand.com/api/fec-corp/checkin?car_license=กท1'));
+    
+    var res = await http.get(Uri.parse('https://api.codingthailand.com/api/fec-corp/checkin?car_license=กท1'));
     // print(res.body);
+
+
     if (res.statusCode == 200) {
       List<dynamic> data = json.decode(res.body);
       return data;
@@ -39,12 +45,12 @@ class _CheckinScreenState extends State<CheckinScreen> {
     checkStatus();
     super.initState();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Check In'),
+        title: const Text('Check In' ),
         backgroundColor: Colors.red.shade400,
       ),
       body: Column(

@@ -4,14 +4,14 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:grouped_list/grouped_list.dart';
 
-class CheckDeliveryScreen extends StatefulWidget {
-  const CheckDeliveryScreen({super.key});
+class PickedScreen extends StatefulWidget {
+  const PickedScreen({super.key});
 
   @override
-  State<CheckDeliveryScreen> createState() => _CheckDeliveryScreenState();
+  State<PickedScreen> createState() => _PickedScreenState();
 }
 
-class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
+class _PickedScreenState extends State<PickedScreen> {
   List<dynamic> deliveryReport = [];
   bool isLoading = false;
   String? error;
@@ -21,8 +21,8 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
     setState(() {
       isLoading = true;
     });  
-    var res = await http.get(
-      Uri.parse('https://api.codingthailand.com/api/fec-corp/check-delivery?car_license=$carLicense'));
+    // var res = await http.get(Uri.parse('https://api.codingthailand.com/api/fec-corp/check-delivery?car_license=$carLicense'));
+    final res =  await http.get(Uri.parse('http://10.1.15.76:8000/Picked'));   
     // print(res.body);
     if (res.statusCode == 200) {
         List<dynamic> resData = json.decode(res.body);

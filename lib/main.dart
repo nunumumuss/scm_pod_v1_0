@@ -6,7 +6,9 @@ import 'package:fec_corp_app/screens/checkin_screen.dart';
 import 'package:fec_corp_app/screens/confirm_screen.dart';
 import 'package:fec_corp_app/screens/fail_screen.dart';
 import 'package:fec_corp_app/screens/home_screen.dart';
+import 'package:fec_corp_app/screens/loaded_screen.dart';
 import 'package:fec_corp_app/screens/login_screen.dart';
+import 'package:fec_corp_app/screens/picked_screen.dart';
 import 'package:fec_corp_app/screens/warehouse_screen.dart';
 import 'package:fec_corp_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +65,8 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/check-delivery', page: () => const CheckDeliveryScreen()),
         GetPage(name: '/warehouse', page: () => const WarehouseScreen()),
         GetPage(name: '/checkin', page: () => const CheckinScreen()),
+        GetPage(name: '/picked', page: () => const PickedScreen()),
+        GetPage(name: '/loaded', page: () => const LoadedScreen()),
         GetPage(name: '/confirm', page: () => const ConfirmScreen()),
         GetPage(name: '/fail', page: () => const FailScreen()),
         GetPage(name: '/login', page: () => const LoginScreen()),

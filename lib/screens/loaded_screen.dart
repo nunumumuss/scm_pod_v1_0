@@ -1,52 +1,56 @@
 // When using TCE-API, please change 'getdata2' to 'getdata' in the initState function 
 
-import 'package:fec_corp_app/constants/constants.dart';
 import 'package:fec_corp_app/widgets/menu_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class WarehouseScreen extends StatefulWidget {
-  const WarehouseScreen({super.key});
+class LoadedScreen extends StatefulWidget {
+  const LoadedScreen({super.key});
 
   @override
-  State<WarehouseScreen> createState() => _WarehouseScreenState();
+  State<LoadedScreen> createState() => _LoadedScreenState();
 }
 
-class _WarehouseScreenState extends State<WarehouseScreen> {
+class _LoadedScreenState extends State<LoadedScreen> {
   final GlobalKey<ScaffoldState> _key = GlobalKey(); // Create a key
-  Future<List<dynamic>>? warehouseFuture;
+  Future<List<dynamic>>? LoadedFuture;
 
   Future<List<dynamic>> getData() async {
-    String apiUri = Constants.apiServer + Constants.ApiPodWarehouse;
-    final response =  await http.get(Uri.parse(apiUri));   
+    final response =  await http.get(Uri.parse('http://10.1.15.76:8000/Loaded'));   
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonData = jsonDecode(response.body);
-      List<Map<String, dynamic>> warehouse = List<Map<String, dynamic>>.from(jsonData['results']);
-      return warehouse;
+      List<Map<String, dynamic>> Loaded = List<Map<String, dynamic>>.from(jsonData['results']);
+      print(Loaded);    
+      // List<dynamic> Loaded = json.decode(res1.body); 
+      // print(Loaded);
+      return Loaded;
     } else {
       // 400 404 401 500
       throw Exception('เกิดข้อผิดพลาดจาก Server โปรดลองใหม่');
     }
   }
   Future<List<dynamic>> getData2() async {
-    var res = await http.get(Uri.parse('https://api.codingthailand.com/api/fec-corp/warehouse'));
+    var res = await http.get(Uri.parse('https://api.codingthailand.com/api/fec-corp/Loaded'));
     // print(res.body);
     if (res.statusCode == 200) {
-        List<dynamic> warehouse = json.decode(res.body); 
-        return warehouse;
+        List<dynamic> Loaded = json.decode(res.body); 
+        return Loaded;
     } else {
       // 400 404 401 500
       throw Exception('เกิดข้อผิดพลาดจาก Server โปรดลองใหม่');
     }
   }
- 
+
+
+// 
   @override
   void initState() {
-    warehouseFuture = getData();
+    LoadedFuture = getData2();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +63,12 @@ class _WarehouseScreenState extends State<WarehouseScreen> {
               _key.currentState!.openDrawer();
             },
             icon: const Icon(Icons.menu)),
-        title: const Text('WareHouse Sites'),
+        title: const Text('Loaded List'),
         backgroundColor: const Color.fromARGB(255, 225, 55, 55),
         toolbarHeight: 80,
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: warehouseFuture, 
+        future: LoadedFuture, 
         builder: (context, snapshot) {
            if (snapshot.hasData) {
               return ListView.separated(
