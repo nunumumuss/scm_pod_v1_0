@@ -1,8 +1,13 @@
+import 'package:fec_corp_app/constants/constants.dart';
+import 'package:fec_corp_app/models/account/account.dart';
+import 'package:fec_corp_app/services/auth_service.dart';
+import 'package:fec_corp_app/providers/account_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:provider/provider.dart';
 
 class PickedScreen extends StatefulWidget {
   const PickedScreen({super.key});
@@ -12,22 +17,26 @@ class PickedScreen extends StatefulWidget {
 }
 
 class _PickedScreenState extends State<PickedScreen> {
+  final authService = AuthService();
   List<dynamic> deliveryReport = [];
   bool isLoading = false;
   String? error;
-
+ 
   Future<void> getData(String carLicense) async {
     try {
     setState(() {
       isLoading = true;
     });  
-    // var res = await http.get(Uri.parse('https://api.codingthailand.com/api/fec-corp/check-delivery?car_license=$carLicense'));
-    final res =  await http.get(Uri.parse('http://10.1.15.76:8000/Picked'));   
+    
+    String apiUri = '${Constants.apiServer}${Constants.ApiPodPicked}?car_license=${carLicense}';
+    final res =  await http.get(Uri.parse(apiUri));  
     // print(res.body);
     if (res.statusCode == 200) {
-        List<dynamic> resData = json.decode(res.body);
+        Map<String, dynamic> jsonData = jsonDecode(res.body);
+        List<Map<String, dynamic>> resData = List<Map<String, dynamic>>.from(jsonData['results']);
         setState(() {
           deliveryReport = resData;
+          print(deliveryReport);
         });
     } else {
       setState(() {
@@ -46,8 +55,11 @@ class _PickedScreenState extends State<PickedScreen> {
   }
 
   @override
-  void initState() {    
-    getData('กท1'); // กท1 / กท0
+  void initState() {     
+    
+    // String carLicense = context.watch<AccountProvider>().account!.carLicense;
+    // print(carLicense);
+    getData('01'); // กท1 / กท0
     super.initState();
   }
 
@@ -57,6 +69,10 @@ class _PickedScreenState extends State<PickedScreen> {
 
     if (error != null) {
       return Scaffold(
+        appBar: AppBar(
+        title: const Text('Message Alert' ),
+        backgroundColor: Colors.red.shade400,
+      ),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -76,8 +92,9 @@ class _PickedScreenState extends State<PickedScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:  deliveryReport.isEmpty ? const Text('สถานะการส่งสินค้า') : 
-        Text('สถานะการส่งสินค้า ${deliveryReport.length} รายการ'),
+        title:  deliveryReport.isEmpty ? const Text('สถานะการส่งสินค้า'): 
+        Text('พร้อมให้ load สินค้า ${deliveryReport.length} รายการ'),
+        backgroundColor: Colors.red.shade400,
       ),
       body: isLoading ? 
             const Center(
@@ -85,11 +102,11 @@ class _PickedScreenState extends State<PickedScreen> {
             )
            : GroupedListView<dynamic, String>(
             elements: deliveryReport,
-            groupBy: (element) => element['shipid'],
+            groupBy: (element) => element['ship_point'],
             groupSeparatorBuilder: (String groupByValue) => Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Shipment ID: $groupByValue', 
+                'คลังสินค้า: $groupByValue', 
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
@@ -99,9 +116,9 @@ class _PickedScreenState extends State<PickedScreen> {
                margin: const EdgeInsets.all(5.0),
                child: ListTile(
                  leading: const Icon(Icons.newspaper),
-                 title: Text('Do ID: ${element['doid']} Bill: ${element['billno']}'),
-                 subtitle: Text('${element['cusname']}'),
-                 trailing: Text(element['load_stat']),
+                 title: Text('Shipment No.: ${element['shipid']}'),
+                 trailing: Text('หน้าท่า: ${element['dock_no']}'),
+                 subtitle: Text(element['province']),
                ), 
             ),
             // itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']), // optional

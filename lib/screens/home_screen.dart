@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: const Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.directions_bus, size: 60, color: Colors.white),
+                    Icon(Icons.directions_bus_sharp, size: 60, color: Colors.white),
                     Text('Confirm',
                         style: TextStyle(fontSize: 20, color: Colors.white)),
                     Text('Delivery',
@@ -89,19 +89,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: const BoxDecoration(
-                  color: Color(0xFFDF2329),
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              child: const Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.message_rounded, size: 60, color: Colors.white),
-                  Text('Message Alert',
-                      style: TextStyle(fontSize: 20, color: Colors.white))
-                ],
+ 
+            InkWell(
+              onTap: () => {Get.toNamed('/picked')},
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                    color: Color(0xFFDF2329),
+                    borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                child: const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.message_sharp, size: 60, color: Colors.white),
+                    Text('Message',
+                        style: TextStyle(fontSize: 20, color: Colors.white)),
+                    Text('Alert',
+                        style: TextStyle(fontSize: 20, color: Colors.white))
+                  ],
+                ),
               ),
             ),
             InkWell(
@@ -131,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.bus_alert_rounded, size: 60, color: Colors.white),
+                  Icon(Icons.departure_board, size: 60, color: Colors.white),
                   Text('Confirm',
                       style: TextStyle(fontSize: 20, color: Colors.white)),
                   Text('Loading',
