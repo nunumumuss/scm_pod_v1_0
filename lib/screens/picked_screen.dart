@@ -56,10 +56,11 @@ class _PickedScreenState extends State<PickedScreen> {
 
   @override
   void initState() {     
-    
-    // String carLicense = context.watch<AccountProvider>().account!.carLicense;
-    // print(carLicense);
-    getData('01'); // กท1 / กท0
+    // Get the account provider and assign account name to user_name
+    final accountProvider = Provider.of<AccountProvider>(context, listen: false);
+    String? user_name = accountProvider.account?.carLicense; // Safely access account name
+    // print (user_name);
+    getData(user_name!); // กท1 / กท0
     super.initState();
   }
 

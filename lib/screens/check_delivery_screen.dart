@@ -1,8 +1,10 @@
+import 'package:fec_corp_app/providers/account_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:provider/provider.dart';
 
 class CheckDeliveryScreen extends StatefulWidget {
   const CheckDeliveryScreen({super.key});
@@ -46,8 +48,12 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
   }
 
   @override
-  void initState() {    
-    getData('กท1'); // กท1 / กท0
+  void initState() {   
+    // Get the account provider and assign account name to user_name
+    final accountProvider = Provider.of<AccountProvider>(context, listen: false);
+    String? user_name = accountProvider.account?.carLicense; // Safely access account name
+    // print (user_name); 
+    getData(user_name!); // กท1 / กท0
     super.initState();
   }
 
