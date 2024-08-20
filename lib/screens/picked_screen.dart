@@ -92,7 +92,7 @@ class _PickedScreenState extends State<PickedScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title:  deliveryReport.isEmpty ? const Text('สถานะการส่งสินค้า'): 
+        title:  deliveryReport.isEmpty ? const Text('พร้อมให้ load สินค้า'): 
         Text('พร้อมให้ load สินค้า ${deliveryReport.length} รายการ'),
         backgroundColor: Colors.red.shade400,
       ),
