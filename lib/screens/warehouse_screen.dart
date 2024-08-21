@@ -18,12 +18,14 @@ class _WarehouseScreenState extends State<WarehouseScreen> {
   Future<List<dynamic>>? warehouseFuture;
 
   Future<List<dynamic>> getData() async {
-    String apiUri = Constants.apiServer + Constants.ApiPodWarehouse;
-    final response =  await http.get(Uri.parse(apiUri));   
-
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonData = jsonDecode(response.body);
+    String apiUri = Constants.apiServer + Constants.ApiPodWarehouse; 
+    final res =  await http.get(Uri.parse(apiUri));   
+ 
+    String resBody = utf8.decode(res.bodyBytes);
+    if (res.statusCode == 200) {
+      Map<String, dynamic> jsonData = jsonDecode(resBody);
       List<Map<String, dynamic>> warehouse = List<Map<String, dynamic>>.from(jsonData['results']);
+      print(warehouse);
       return warehouse;
     } else {
       // 400 404 401 500

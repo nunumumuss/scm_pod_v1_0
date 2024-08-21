@@ -1,3 +1,4 @@
+import 'package:fec_corp_app/constants/constants.dart';
 import 'package:fec_corp_app/providers/account_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,13 +24,22 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
     setState(() {
       isLoading = true;
     });  
-    var res = await http.get(
-      Uri.parse('https://api.codingthailand.com/api/fec-corp/check-delivery?car_license=$carLicense'));
+
+    String apiUri = Constants.apiServer + Constants.ApiPodDeliveryLog + '?car_license=' + carLicense; 
+
+    final res =  await http.get(Uri.parse(apiUri));  
+    // var res = await http.get(       Uri.parse('https://api.codingthailand.com/api/fec-corp/check-delivery?car_license=$carLicense'));
+
     // print(res.body);
     if (res.statusCode == 200) {
-        List<dynamic> resData = json.decode(res.body);
+        // List<dynamic> resData = json.decode(res.body);
+        String resBody = utf8.decode(res.bodyBytes);
+        Map<String, dynamic> jsonData = jsonDecode(resBody);
+        List<Map<String, dynamic>> resData = List<Map<String, dynamic>>.from(jsonData['results']);
         setState(() {
           deliveryReport = resData;
+          // print (deliveryReport);
+          // print(res);
         });
     } else {
       setState(() {
@@ -51,9 +61,9 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
   void initState() {   
     // Get the account provider and assign account name to user_name
     final accountProvider = Provider.of<AccountProvider>(context, listen: false);
-    String? user_name = accountProvider.account?.carLicense; // Safely access account name
+    String? carLicense = accountProvider.account?.carLicense; // Safely access account name
     // print (user_name); 
-    getData(user_name!); // กท1 / กท0
+    getData(carLicense!); // กท1 / กท0
     super.initState();
   }
 
@@ -79,7 +89,7 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
         ),
       );
     }
-
+    
     return Scaffold(
       appBar: AppBar(
         title:  deliveryReport.isEmpty ? const Text('สถานะการส่งสินค้า') : 
@@ -100,6 +110,7 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
                 style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
+            
             itemBuilder: (context, dynamic element) => Card(
                elevation: 8.0,
                margin: const EdgeInsets.all(5.0),
@@ -107,7 +118,7 @@ class _CheckDeliveryScreenState extends State<CheckDeliveryScreen> {
                  leading: const Icon(Icons.newspaper),
                  title: Text('Do ID: ${element['doid']} Bill: ${element['billno']}'),
                  subtitle: Text('${element['cusname']}'),
-                 trailing: Text(element['load_stat']),
+                 trailing: Text(element['do_stat']),
                ), 
             ),
             // itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']), // optional

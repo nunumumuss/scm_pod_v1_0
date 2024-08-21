@@ -28,6 +28,7 @@ class _CheckinScreenState extends State<CheckinScreen> {
   Future<List<dynamic>> getData() async {
     
     var res = await http.get(Uri.parse('https://api.codingthailand.com/api/fec-corp/checkin?car_license=กท1'));
+    
     // print(res.body);
 
 
