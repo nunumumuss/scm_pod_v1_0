@@ -25,8 +25,8 @@ class _WarehouseScreenState extends State<WarehouseScreen> {
     if (res.statusCode == 200) {
       Map<String, dynamic> jsonData = jsonDecode(resBody);
       List<Map<String, dynamic>> warehouse = List<Map<String, dynamic>>.from(jsonData['results']);
-      print(warehouse);
-      return warehouse;
+      // print(warehouse);
+      // return warehouse;
     } else {
       // 400 404 401 500
       throw Exception('เกิดข้อผิดพลาดจาก Server โปรดลองใหม่');
